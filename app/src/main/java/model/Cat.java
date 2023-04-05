@@ -1,53 +1,72 @@
 package model;
 
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import utils.ColorUtils;
 
-public class Cat{
+import java.util.List;
+import java.util.Random;
+
+public class Cat extends Rectangle {
+
     private Color color;
-    private int x;
-    private int y;
+    private double startX, startY;
+    private boolean isDragged;
 
-    public Color getColor() {
+    public Cat(double width, double height, Color color){
+        super(width, height);
+        this.color=color;
+        setFill(color);
+        setStroke(color.BLACK);
+
+        //initialisation des attributs de deplacement
+        startX = 0;
+        startY =0;
+        isDragged = false;
+    }
+    //methode appelée a la fin du deplacement
+    public void stopDragging(){
+        //désactivation du déplacement
+        isDragged=false;
+    }
+
+    //methode appelée pendant le déplacement
+    public void drag(double x, double y){
+        //si l'objet est entrain d'etre déplacé
+        if(isDragged){
+            //calcul de la new position en fonction de la position de la souris
+            //et de la distance entre le point de départ du déplacement et la position de l'objet
+            setX(x-startX);
+            setY(y-startY);
+        }
+    }
+
+    public static Group createForm(int numCats, double width, double height, Color color){
+        Group group = new Group();
+        for (int i = 0; i < numCats; i++) {
+            Rectangle rectangle = new Rectangle(width, height, Color.RED);
+            rectangle.setLayoutX(i * width); // positionnement horizontal
+            rectangle.setLayoutY(0); // positionnement vertical
+            group.getChildren().add(rectangle);
+        }
+       /* for(int i=0; i<numCats;i++){
+            Cat cat = new Cat(width, height, color);
+            if(i>0){
+                Cat firstCat = (Cat) group.getChildren().get(0);
+                if(i<(numCats/2)) {
+                    cat.setX(firstCat.getWidth() * i);
+                }
+                else {
+                    cat.setY(firstCat.getHeight()*(i-(numCats/2)));
+                }
+
+            }
+            group.getChildren().add(cat);
+        }*/
+        return group;
+    }
+    public Color getColor(){
         return color;
     }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setCol(int y) {
-        this.y = y;
-    }
-
-    public Cat(int x, int y){
-            this.color = generateRandomColor();
-            this.x = x;
-            this.y = y;
-        }
-
-       /*public Rectangle getRectangle(){
-            Rectangle rect = new Rectangle(50, 50, this.color);
-            rect.setX(this.x);
-            rect.setY(this.y);
-            return rect;
-        }*/
-        private Color generateRandomColor(){
-            double red = Math.random();
-            double green = Math.random();
-            double blue = Math.random();
-            return  new Color(red, green, blue, 1.0);
-        }
-    }
+}

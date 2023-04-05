@@ -1,66 +1,50 @@
 package model;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.geometry.Pos;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import view.GameScreen;
-import javafx.scene.layout.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import model.Cat;
+import view.GameScreen;
 
-import java.awt.*;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends Application {
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
-       BorderPane root = new BorderPane();
-       root.setPrefSize(500, 500);
+    public void start(Stage primaryStage) {
+        //test de la nouvelle methode createForm de la classe Level
+        Level level = new Level("controller/level1.txt");
+        List<VBox> vBox = new ArrayList<>();
+        vBox = level.getListeVbox();
 
-        //creation de la région centrale
-        GridPane centerPaneGameScreen = new GameScreen(5, 5);
-        centerPaneGameScreen.setGridLinesVisible(true);//active la visibilité des lignes de la grille
-        centerPaneGameScreen.setPrefSize(250, 250);
+        // Création d'un groupe de chats avec la méthode createForm de la classe Cat
+        Group catsGroup = Cat.createForm(4, 25, 25, Color.ORANGE);
+        GameScreen gameScreen = new GameScreen(level.getNumRows(), level.getNumCols());
 
-        //creation des regions left, rigth, top rt bottom
-       // Pane leftPane = ((GameScreen) centerPaneGameScreen).gameScreen1;
-        Pane leftPane = new Pane();
-        Pane rigthPane = new Pane();
-        Pane topPane = new Pane();
-        Pane bottomPane = new Pane();
+        //test ------------------------------------------------
+        Rectangle rect = new Rectangle(0, 0,25, 25);
+        rect.setFill(Color.RED);
+        Rectangle rect1 = new Rectangle(0, 1,25, 25);
+        rect1.setFill(Color.GRAY);
+        Rectangle rect2 = new Rectangle(1, 0,25, 25);
+        rect2.setFill(Color.PINK);
+        Group gp = new Group();
+        gp.getChildren().addAll(rect, rect1, rect2);
+        //-------------------------------------------------------
+        // Création de la scène avec le groupe de chats
+        Scene scene = new Scene(gameScreen, 800, 600);
 
-        leftPane.setPrefSize(125, 125);
-        rigthPane.setPrefSize(125, 125);
-        topPane.setPrefSize(125, 125);
-        bottomPane.setPrefSize(125, 125);
-
-        //ajout des région a la borderPane
-        root.setLeft(leftPane);
-        root.setRight(rigthPane);
-        root.setTop(topPane);
-        root.setBottom(bottomPane);
-        root.setCenter(centerPaneGameScreen);
-
-        // Ajouter une bordure à la BorderPane
-        root.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-
-        Scene scene = new Scene(root, 500, 500);
-
+        // Configuration de la fenêtre
+        primaryStage.setTitle("Cats");
         primaryStage.setScene(scene);
-
-        primaryStage.setTitle("Game Screen");
         primaryStage.show();
-
     }
-    public static void main(String[] args){
 
-        //lancer l'appli
+    public static void main(String[] args) {
         launch(args);
     }
 }
