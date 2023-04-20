@@ -5,13 +5,18 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 public class LevelLoader {
-    private List liste;
-    public LevelLoader(String nameFile){
-            liste =new ArrayList();
+    private final String fileName;
+
+    public LevelLoader(String fileName) {
+        this.fileName = fileName;
+            /*liste =new ArrayList();
             File file = new File(nameFile);
             try{
                 Scanner scanner = new Scanner(file);
@@ -31,10 +36,9 @@ public class LevelLoader {
                 e.printStackTrace();
             }
 
-        }
-    public List getListe() {
-        return liste;
+        }*/
     }
-
-
+    public List<String> load() throws IOException {
+        return Files.readAllLines(Paths.get(fileName));
+    }
 }
